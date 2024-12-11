@@ -10,3 +10,4 @@ D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Domain\obj\Debug\net9.0\refint
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Domain\obj\Debug\net9.0\Domain.pdb
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Domain\obj\Debug\net9.0\ref\Domain.dll
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Domain\obj\Debug\net9.0\Domain.sourcelink.json
+D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Domain\obj\Debug\net9.0\Domain.csproj.AssemblyReference.cache

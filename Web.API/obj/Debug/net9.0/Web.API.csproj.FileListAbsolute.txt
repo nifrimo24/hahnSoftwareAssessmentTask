@@ -38,3 +38,5 @@ D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\bin\Debug\net9.0\Appli
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\bin\Debug\net9.0\Infrastructure.pdb
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\bin\Debug\net9.0\Domain.pdb
 D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\obj\Debug\net9.0\Web.API.sourcelink.json
+D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\bin\Debug\net9.0\MediatR.dll
+D:\Confiamed\Proyectos\hahnSoftwareAssessmentTask\Web.API\bin\Debug\net9.0\MediatR.Contracts.dll
