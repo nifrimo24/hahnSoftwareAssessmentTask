@@ -1,3 +1,3 @@
 ﻿namespace Domain.Companies;
 
-public record CompanyId();
+public record CompanyId(Guid Value);
