@@ -2,6 +2,6 @@
 
 public interface IJobVacancyRepository
 {
-    Task<JobVacancy> GetByIdAsync(JobVacancyId jobVacancyId );
     Task AddAsync(JobVacancy jobVacancy);
+    Task<JobVacancy?> GetByIdAsync(JobVacancyId jobVacancyId );
 }
