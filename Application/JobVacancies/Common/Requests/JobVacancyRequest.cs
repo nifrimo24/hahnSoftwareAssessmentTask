@@ -1,7 +1,9 @@
-﻿namespace Application.JobVacancies.Common.Requests;
+﻿using Domain.Companies;
+
+namespace Application.JobVacancies.Common.Requests;
 
 public abstract record JobVacancyRequest(
-    int CompanyId,
+    CompanyId CompanyId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,

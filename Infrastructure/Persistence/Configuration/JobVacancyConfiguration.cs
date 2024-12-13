@@ -1,4 +1,5 @@
-﻿using Domain.JobVacancies;
+﻿using Domain.Companies;
+using Domain.JobVacancies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,12 +12,24 @@ public class JobVacancyConfiguration : IEntityTypeConfiguration<JobVacancy>
         builder.ToTable("JobVacancies");
 
         builder.HasKey(jv => jv.Id);
+        
+        builder.Property(jv => jv.Id)
+            .HasConversion(
+                jobVacancyId => jobVacancyId.Value,
+                value => new JobVacancyId(value)
+            );
 
         builder.Property(jv => jv.CompanyId).IsRequired();
-
-        builder.Property(jv => jv.AnnualSalaryMax >= 0);
         
-        builder.Property(jv => jv.AnnualSalaryMin >= 0);
+        builder.Property(jv => jv.CompanyId)
+            .HasConversion(
+                companyId => companyId.Value,
+                value => new CompanyId(value)
+            );
+
+        builder.Property(jv => jv.AnnualSalaryMax).IsRequired().HasDefaultValue(0);
+
+        builder.Property(jv => jv.AnnualSalaryMin).IsRequired().HasDefaultValue(0);
         
         builder.Property(jv => jv.CreatedAt).IsRequired();
         
@@ -27,11 +40,5 @@ public class JobVacancyConfiguration : IEntityTypeConfiguration<JobVacancy>
         builder.Property(jv => jv.Title).HasMaxLength(50);
         
         builder.Property(jv => jv.Type).HasMaxLength(20);
-        
-        builder.HasOne(jv => jv.Company)
-            .WithMany(c => c.JobVacancies)
-            .HasForeignKey(jv => jv.CompanyId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -9,8 +9,14 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
     public void Configure(EntityTypeBuilder<Company> builder)
     {
         builder.ToTable("Companies");
-        
+
         builder.HasKey(c => c.Id);
+        
+        builder.Property(c => c.Id)
+            .HasConversion(
+                companyId => companyId.Value,
+                value => new CompanyId(value)
+            );
         
         builder.Property(c => c.CompanyName).HasMaxLength(50);
         

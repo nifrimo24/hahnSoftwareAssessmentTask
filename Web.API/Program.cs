@@ -1,8 +1,13 @@
+using Application;
+using Infrastructure;
+using Web.API;
+using Web.API.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddPresentation()
+    .AddInfrastructure(builder.Configuration)
+    .AddApplication();
 
 var app = builder.Build();
 
@@ -10,6 +15,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
