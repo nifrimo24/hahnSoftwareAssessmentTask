@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -15,8 +14,10 @@ namespace Infrastructure.Persistence.Migrations
                 name: "Companies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CompanyLogo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GeoLocation = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Industry = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
@@ -29,8 +30,9 @@ namespace Infrastructure.Persistence.Migrations
                 name: "JobVacancies",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     AnnualSalaryMax = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     AnnualSalaryMin = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
