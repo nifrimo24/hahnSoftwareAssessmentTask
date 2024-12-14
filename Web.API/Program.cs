@@ -1,5 +1,6 @@
 using Application;
 using Application.Companies.Create;
+using Application.JobVacancies.Create;
 using Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,16 @@ app.MapPost("/companies", async (ISender mediator, [FromBody] CreateCompanyComma
 });
 
 #endregion CompanyEndpoints
+
+#region JobVacancyEndpoints
+
+app.MapPost("/job-vacancies", async (ISender mediator, [FromBody] CreateJobVacancyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion JobVacancyEndpoints
 
 app.Run();
 

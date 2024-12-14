@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.JobVacancies.Create;
 
-internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancyCommand, Unit>
+internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancyCommand, JobVacancyId>
 {
     private readonly IJobVacancyRepository _jobVacancyRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,28 +15,26 @@ internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancy
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Unit> Handle(CreateJobVacancyCommand command, CancellationToken cancellationToken)
+    public async Task<JobVacancyId> Handle(CreateJobVacancyCommand command, CancellationToken cancellationToken)
     {
-        foreach (var jobVacancy in command.JobVacancyRequests.Select(request => new JobVacancy(
-                     new JobVacancyId(Guid.NewGuid()),
-                     request.CompanyId,
-                     request.AnnualSalaryMax,
-                     request.AnnualSalaryMin,
-                     request.CreatedAt,
-                     request.Currency,
-                     request.Excerpt,
-                     request.Level,
-                     request.PostedDate,
-                     request.Title,
-                     request.Type,
-                     request.Url
-                 )))
-        {
-            await _jobVacancyRepository.AddAsync(jobVacancy);
-        }
-
+        var jobVacancy = new JobVacancy(
+            new JobVacancyId(Guid.NewGuid()),
+            command.CompanyId,
+            command.AnnualSalaryMax,
+            command.AnnualSalaryMin,
+            command.CreatedAt,
+            command.Currency,
+            command.Excerpt,
+            command.Level,
+            command.PostedDate,
+            command.Title,
+            command.Type,
+            command.Url
+        );
+        
+        await _jobVacancyRepository.AddAsync(jobVacancy);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return jobVacancy.Id;
     }
 }
