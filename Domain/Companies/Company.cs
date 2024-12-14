@@ -12,14 +12,12 @@ public class Company : AggregateRoot
 
     public List<JobVacancy> JobVacancies { get; private set; }
 
-    public Company(CompanyId companyId, string companyName, string geoLocation, string industry,
-        List<JobVacancy> jobVacancies)
+    public Company(CompanyId companyId, string companyName, string geoLocation, string industry)
     {
         Id = companyId;
         CompanyName = companyName;
         GeoLocation = geoLocation;
         Industry = industry;
-        JobVacancies = jobVacancies;
     }
 
     public Company()

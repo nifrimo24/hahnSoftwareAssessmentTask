@@ -21,8 +21,7 @@ internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyComman
                      new CompanyId(Guid.NewGuid()),
                      request.CompanyName,
                      request.GeoLocation,
-                     request.Industry,
-                     request.JobVacancies
+                     request.Industry
                  )))
         {
             await _companyRepository.AddAsync(company);

@@ -1,5 +1,8 @@
 using Application;
+using Application.Companies.Create;
 using Infrastructure;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Web.API;
 using Web.API.Extensions;
 
@@ -38,6 +41,16 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
+
+#region CompanyEndpoints
+
+app.MapPost("/companies", async (ISender mediator, [FromBody] CreateCompanyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion CompanyEndpoints
 
 app.Run();
 

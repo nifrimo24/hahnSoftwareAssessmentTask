@@ -2,9 +2,8 @@
 
 namespace Application.Companies.Common.Requests;
 
-public abstract record CompanyRequest(
+public record CompanyRequest(
     string CompanyName,
     string GeoLocation,
-    string Industry,
-    List<JobVacancy> JobVacancies
+    string Industry
 );

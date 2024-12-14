@@ -3,6 +3,6 @@ using MediatR;
 
 namespace Application.Companies.Create;
 
-public abstract record CreateCompanyCommand(
+public record CreateCompanyCommand(
     List<CompanyRequest> CompanyRequests
 ) : IRequest<Unit>;
