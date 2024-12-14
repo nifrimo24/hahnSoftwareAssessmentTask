@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.JobVacancies.Create;
 
-internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancyCommand, JobVacancyId>
+internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancyCommand, int>
 {
     private readonly IJobVacancyRepository _jobVacancyRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,10 +15,9 @@ internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancy
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<JobVacancyId> Handle(CreateJobVacancyCommand command, CancellationToken cancellationToken)
+    public async Task<int> Handle(CreateJobVacancyCommand command, CancellationToken cancellationToken)
     {
         var jobVacancy = new JobVacancy(
-            new JobVacancyId(Guid.NewGuid()),
             command.CompanyId,
             command.AnnualSalaryMax,
             command.AnnualSalaryMin,

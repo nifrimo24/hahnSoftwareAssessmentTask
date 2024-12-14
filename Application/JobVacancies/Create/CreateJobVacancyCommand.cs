@@ -15,4 +15,4 @@ public record CreateJobVacancyCommand(
     string Title,
     string Type,
     string Url
-) : IRequest<JobVacancyId>;
+) : IRequest<int>;

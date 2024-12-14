@@ -12,12 +12,6 @@ public class JobVacancyConfiguration : IEntityTypeConfiguration<JobVacancy>
         builder.ToTable("JobVacancies");
 
         builder.HasKey(jv => jv.Id);
-        
-        builder.Property(jv => jv.Id)
-            .HasConversion(
-                jobVacancyId => jobVacancyId.Value,
-                value => new JobVacancyId(value)
-            );
 
         builder.Property(jv => jv.CompanyId).IsRequired();
 
