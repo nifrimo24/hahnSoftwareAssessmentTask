@@ -1,6 +1,7 @@
 using Application;
 using Application.Companies.Create;
 using Application.JobVacancies.Create;
+using Application.JobVacancies.Upsert;
 using Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,16 @@ app.MapPost("/job-vacancies", async (ISender mediator, [FromBody] CreateJobVacan
 });
 
 #endregion JobVacancyEndpoints
+
+#region UpsertEndpoints
+
+app.MapPost("/upsert", async (ISender mediator, [FromBody] UpsertJobVacanciesCompaniesCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion UpsertEndpoints
 
 app.Run();
 
