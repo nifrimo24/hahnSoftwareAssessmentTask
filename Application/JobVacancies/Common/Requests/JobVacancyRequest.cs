@@ -3,7 +3,7 @@
 namespace Application.JobVacancies.Common.Requests;
 
 public record JobVacancyRequest(
-    CompanyId CompanyId,
+    int CompanyId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,

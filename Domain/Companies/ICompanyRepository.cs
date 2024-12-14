@@ -3,5 +3,5 @@
 public interface ICompanyRepository
 {
     Task AddAsync(Company company);
-    Task<Company?> GetByIdAsync(CompanyId companyId);
+    Task<Company?> GetByIdAsync(int companyId);
 }

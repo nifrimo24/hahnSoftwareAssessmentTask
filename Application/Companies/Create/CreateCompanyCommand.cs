@@ -8,4 +8,4 @@ public record CreateCompanyCommand(
     string CompanyLogo,
     string GeoLocation,
     string Industry
-) : IRequest<CompanyId>;
+) : IRequest<int>;

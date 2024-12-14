@@ -20,12 +20,6 @@ public class JobVacancyConfiguration : IEntityTypeConfiguration<JobVacancy>
             );
 
         builder.Property(jv => jv.CompanyId).IsRequired();
-        
-        builder.Property(jv => jv.CompanyId)
-            .HasConversion(
-                companyId => companyId.Value,
-                value => new CompanyId(value)
-            );
 
         builder.Property(jv => jv.AnnualSalaryMax).IsRequired().HasDefaultValue(0);
 

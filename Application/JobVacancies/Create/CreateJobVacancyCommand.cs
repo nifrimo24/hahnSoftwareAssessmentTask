@@ -1,11 +1,10 @@
-﻿using Domain.Companies;
-using Domain.JobVacancies;
+﻿using Domain.JobVacancies;
 using MediatR;
 
 namespace Application.JobVacancies.Create;
 
 public record CreateJobVacancyCommand(
-    CompanyId CompanyId,
+    int CompanyId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,

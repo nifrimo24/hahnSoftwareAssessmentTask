@@ -12,12 +12,6 @@ public class CompanyConfiguration : IEntityTypeConfiguration<Company>
 
         builder.HasKey(c => c.Id);
         
-        builder.Property(c => c.Id)
-            .HasConversion(
-                companyId => companyId.Value,
-                value => new CompanyId(value)
-            );
-        
         builder.Property(c => c.CompanyName).HasMaxLength(50);
         
         builder.Property(c => c.GeoLocation).HasMaxLength(50);

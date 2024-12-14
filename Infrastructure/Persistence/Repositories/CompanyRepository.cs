@@ -13,5 +13,5 @@ public class CompanyRepository : ICompanyRepository
     }
     
     public async Task AddAsync(Company company) => await _context.Companies.AddAsync(company);
-    public Task<Company?> GetByIdAsync(CompanyId companyId) => _context.Companies.SingleOrDefaultAsync(x => x.Id == companyId);
+    public Task<Company?> GetByIdAsync(int companyId) => _context.Companies.SingleOrDefaultAsync(x => x.Id == companyId);
 }
