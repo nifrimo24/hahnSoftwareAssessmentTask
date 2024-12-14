@@ -1,8 +1,11 @@
-﻿using Application.Companies.Common.Requests;
+﻿using Domain.Companies;
 using MediatR;
 
 namespace Application.Companies.Create;
 
 public record CreateCompanyCommand(
-    List<CompanyRequest> CompanyRequests
-) : IRequest<Unit>;
+    string CompanyName,
+    string CompanyLogo,
+    string GeoLocation,
+    string Industry
+) : IRequest<CompanyId>;

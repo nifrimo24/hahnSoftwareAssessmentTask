@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Companies.Create;
 
-internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, Unit>
+internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, CompanyId>
 {
     private readonly ICompanyRepository _companyRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,20 +15,19 @@ internal class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyComman
         _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     }
 
-    public async Task<Unit> Handle(CreateCompanyCommand command, CancellationToken cancellationToken)
+    public async Task<CompanyId> Handle(CreateCompanyCommand command, CancellationToken cancellationToken)
     {
-        foreach (var company in command.CompanyRequests.Select(request => new Company(
-                     new CompanyId(Guid.NewGuid()),
-                     request.CompanyName,
-                     request.GeoLocation,
-                     request.Industry
-                 )))
-        {
-            await _companyRepository.AddAsync(company);
-        }
-
+        var company = new Company(
+            new CompanyId(Guid.NewGuid()),
+            command.CompanyName,
+            command.CompanyLogo,
+            command.GeoLocation,
+            command.Industry
+        );
+        
+        await _companyRepository.AddAsync(company);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        return company.Id;
     }
 }
