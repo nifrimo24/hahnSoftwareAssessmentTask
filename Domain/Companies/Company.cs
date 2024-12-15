@@ -7,9 +7,9 @@ public class Company : AggregateRoot
 {
     public int Id { get; private set; }
     public string CompanyName { get; private set; }
-    public string CompanyLogo { get; private set; }
-    public string GeoLocation { get; private set; }
-    public string Industry { get; private set; }
+    public string CompanyLogo { get; set; }
+    public string GeoLocation { get; set; }
+    public string Industry { get; set; }
 
     public List<JobVacancy> JobVacancies { get; private set; }
 

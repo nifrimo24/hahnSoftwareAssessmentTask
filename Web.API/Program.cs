@@ -1,5 +1,6 @@
 using Application;
 using Application.Companies.Create;
+using Application.Companies.Update;
 using Application.JobVacancies.Create;
 using Application.JobVacancies.Update;
 using Application.JobVacancies.Upsert;
@@ -29,6 +30,12 @@ app.UseHttpsRedirection();
 #region CompanyEndpoints
 
 app.MapPost("/companies", async (ISender mediator, [FromBody] CreateCompanyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+app.MapPut("/companies", async (ISender mediator, [FromBody] UpdateCompanyCommand command) =>
 {
     var createResult = await mediator.Send(command);
     return Results.Ok(createResult);
