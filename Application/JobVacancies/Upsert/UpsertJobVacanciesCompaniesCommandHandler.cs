@@ -50,7 +50,7 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
 
         var createCompanyResult = await _mediator.Send(companyCommand, cancellationToken);
 
-        CreateJobVacancyCommand newCompanyobVacancyCommand = new(
+        CreateJobVacancyCommand newCompanyJobVacancyCommand = new(
             createCompanyResult,
             command.AnnualSalaryMax,
             command.AnnualSalaryMin,
@@ -64,7 +64,7 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
             command.Url
         );
 
-        var newCompanyJobVacancyResult = await _mediator.Send(newCompanyobVacancyCommand, cancellationToken);
+        var newCompanyJobVacancyResult = await _mediator.Send(newCompanyJobVacancyCommand, cancellationToken);
 
         return [createCompanyResult, newCompanyJobVacancyResult];
     }
