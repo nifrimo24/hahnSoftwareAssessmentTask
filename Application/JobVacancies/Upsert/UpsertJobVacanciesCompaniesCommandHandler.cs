@@ -1,22 +1,19 @@
-﻿using Domain.Companies;
-using Domain.JobVacancies;
-using Domain.Primitives;
+﻿using Application.Companies.Create;
+using Application.JobVacancies.Create;
+using Domain.Companies;
 using MediatR;
 
 namespace Application.JobVacancies.Upsert;
 
 internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<int>>
 {
-    private readonly IJobVacancyRepository _jobVacancyRepository;
     private readonly ICompanyRepository _companyRepository;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly ISender _mediator;
 
-    public UpsertJobVacanciesCompaniesCommandHandler(IJobVacancyRepository jobVacancyRepository,
-        ICompanyRepository companyRepository, IUnitOfWork unitOfWork)
+    public UpsertJobVacanciesCompaniesCommandHandler(ICompanyRepository companyRepository, ISender mediator)
     {
-        _jobVacancyRepository = jobVacancyRepository ?? throw new ArgumentNullException(nameof(jobVacancyRepository));
         _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
-        _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     public async Task<List<int>> Handle(UpsertJobVacanciesCompaniesCommand command, CancellationToken cancellationToken)
@@ -25,7 +22,7 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
 
         if (companyExists != null)
         {
-            var jobVacancy1 = new JobVacancy(
+            CreateJobVacancyCommand existsCompanyJobVacancyCommand = new(
                 companyExists.Id,
                 command.AnnualSalaryMax,
                 command.AnnualSalaryMin,
@@ -39,24 +36,22 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
                 command.Url
             );
 
-            await _jobVacancyRepository.AddAsync(jobVacancy1);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var existsCompanyJobVacancyResult = await _mediator.Send(existsCompanyJobVacancyCommand, cancellationToken);
 
-            return new List<int> { companyExists.Id, jobVacancy1.Id };
+            return [companyExists.Id, existsCompanyJobVacancyResult];
         }
 
-        var company = new Company(
+        CreateCompanyCommand companyCommand = new(
             command.CompanyName,
             command.CompanyLogo,
             command.GeoLocation,
             command.Industry
         );
 
-        await _companyRepository.AddAsync(company);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var createCompanyResult = await _mediator.Send(companyCommand, cancellationToken);
 
-        var jobVacancy = new JobVacancy(
-            company.Id,
+        CreateJobVacancyCommand newCompanyobVacancyCommand = new(
+            createCompanyResult,
             command.AnnualSalaryMax,
             command.AnnualSalaryMin,
             command.CreatedAt,
@@ -69,9 +64,8 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
             command.Url
         );
 
-        await _jobVacancyRepository.AddAsync(jobVacancy);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+        var newCompanyJobVacancyResult = await _mediator.Send(newCompanyobVacancyCommand, cancellationToken);
 
-        return new List<int> { company.Id, jobVacancy.Id };
+        return [createCompanyResult, newCompanyJobVacancyResult];
     }
 }
