@@ -1,0 +1,11 @@
+# Ignore build output directories
+**/bin/
+**/obj/
+
+# Ignore specific file types
+*.dll
+*.pdb
+*.cache
+*.exe
+*.json
+*.txt
