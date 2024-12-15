@@ -1,20 +1,9 @@
-﻿using MediatR;
+﻿using Application.JobVacancies.Common.Requests;
+using Application.JobVacancies.Common.Responses;
+using MediatR;
 
 namespace Application.JobVacancies.Upsert;
 
 public record UpsertJobVacanciesCompaniesCommand(
-    string CompanyName,
-    string CompanyLogo,
-    string GeoLocation,
-    string Industry,
-    int AnnualSalaryMax,
-    int AnnualSalaryMin,
-    string CreatedAt,
-    string Currency,
-    string Excerpt,
-    string Level,
-    string PostedDate,
-    string Title,
-    string Type,
-    string Url
-):IRequest<List<int>>;
+    List<JobVacancyCompanyRequest> JobVacancyCompanies
+) : IRequest<List<JobVacancyCompanyResponse>>;

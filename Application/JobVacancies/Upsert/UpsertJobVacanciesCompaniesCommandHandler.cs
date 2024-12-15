@@ -1,11 +1,13 @@
 ﻿using Application.Companies.Create;
+using Application.JobVacancies.Common.Responses;
 using Application.JobVacancies.Create;
 using Domain.Companies;
 using MediatR;
 
 namespace Application.JobVacancies.Upsert;
 
-internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<int>>
+internal class
+    UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<JobVacancyCompanyResponse>>
 {
     private readonly ICompanyRepository _companyRepository;
     private readonly ISender _mediator;
@@ -16,56 +18,80 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task<List<int>> Handle(UpsertJobVacanciesCompaniesCommand command, CancellationToken cancellationToken)
+    public async Task<List<JobVacancyCompanyResponse>> Handle(UpsertJobVacanciesCompaniesCommand command, CancellationToken cancellationToken)
     {
-        var companyExists = await _companyRepository.GetByCompanyNameAsync(command.CompanyName);
-
-        if (companyExists != null)
+        List<JobVacancyCompanyResponse> jobVacancyCompanyResponse = [];
+        var registerNumber = 0;
+        
+        foreach (var request in command.JobVacancyCompanies)
         {
-            CreateJobVacancyCommand existsCompanyJobVacancyCommand = new(
-                companyExists.Id,
-                command.AnnualSalaryMax,
-                command.AnnualSalaryMin,
-                command.CreatedAt,
-                command.Currency,
-                command.Excerpt,
-                command.Level,
-                command.PostedDate,
-                command.Title,
-                command.Type,
-                command.Url
-            );
+            var companyExists = await _companyRepository.GetByCompanyNameAsync(request.CompanyName);
 
-            var existsCompanyJobVacancyResult = await _mediator.Send(existsCompanyJobVacancyCommand, cancellationToken);
+            if (companyExists != null)
+            {
+                CreateJobVacancyCommand existsCompanyJobVacancyCommand = new(
+                    companyExists.Id,
+                    request.AnnualSalaryMax,
+                    request.AnnualSalaryMin,
+                    request.CreatedAt,
+                    request.Currency,
+                    request.Excerpt,
+                    request.Level,
+                    request.PostedDate,
+                    request.Title,
+                    request.Type,
+                    request.Url
+                );
 
-            return [companyExists.Id, existsCompanyJobVacancyResult];
+                var existsCompanyJobVacancyCreateResult =
+                    await _mediator.Send(existsCompanyJobVacancyCommand, cancellationToken);
+                
+                var existsCompanyJobVacancyResponse = new JobVacancyCompanyResponse(
+                    companyExists.Id,
+                    existsCompanyJobVacancyCreateResult,
+                    registerNumber++
+                    
+                );
+                
+                jobVacancyCompanyResponse.Add(existsCompanyJobVacancyResponse);
+            }
+            else
+            {
+                CreateCompanyCommand companyCommand = new(
+                    request.CompanyName,
+                    request.CompanyLogo,
+                    request.GeoLocation,
+                    request.Industry
+                );
+
+                var createCompanyResult = await _mediator.Send(companyCommand, cancellationToken);
+
+                CreateJobVacancyCommand newCompanyJobVacancyCommand = new(
+                    createCompanyResult,
+                    request.AnnualSalaryMax,
+                    request.AnnualSalaryMin,
+                    request.CreatedAt,
+                    request.Currency,
+                    request.Excerpt,
+                    request.Level,
+                    request.PostedDate,
+                    request.Title,
+                    request.Type,
+                    request.Url
+                );
+
+                var newCompanyJobVacancyResult = await _mediator.Send(newCompanyJobVacancyCommand, cancellationToken);
+            
+                var newCompanyJobVacancyResponse = new JobVacancyCompanyResponse(
+                    createCompanyResult,
+                    newCompanyJobVacancyResult,
+                    registerNumber++
+                );
+            
+                jobVacancyCompanyResponse.Add(newCompanyJobVacancyResponse);
+            }
         }
-
-        CreateCompanyCommand companyCommand = new(
-            command.CompanyName,
-            command.CompanyLogo,
-            command.GeoLocation,
-            command.Industry
-        );
-
-        var createCompanyResult = await _mediator.Send(companyCommand, cancellationToken);
-
-        CreateJobVacancyCommand newCompanyJobVacancyCommand = new(
-            createCompanyResult,
-            command.AnnualSalaryMax,
-            command.AnnualSalaryMin,
-            command.CreatedAt,
-            command.Currency,
-            command.Excerpt,
-            command.Level,
-            command.PostedDate,
-            command.Title,
-            command.Type,
-            command.Url
-        );
-
-        var newCompanyJobVacancyResult = await _mediator.Send(newCompanyJobVacancyCommand, cancellationToken);
-
-        return [createCompanyResult, newCompanyJobVacancyResult];
+        
+        return jobVacancyCompanyResponse;
     }
 }

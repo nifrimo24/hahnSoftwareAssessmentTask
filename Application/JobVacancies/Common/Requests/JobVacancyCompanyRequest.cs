@@ -2,8 +2,11 @@
 
 namespace Application.JobVacancies.Common.Requests;
 
-public record JobVacancyRequest(
-    int CompanyId,
+public record JobVacancyCompanyRequest(
+    string CompanyName,
+    string CompanyLogo,
+    string GeoLocation,
+    string Industry,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,
