@@ -6,21 +6,21 @@ namespace Domain.JobVacancies;
 public class JobVacancy : AggregateRoot
 {
     public int Id { get; private set; }
-    public int CompanyId { get; private set; }
-    public int ApiId { get; private set; }
-    public int AnnualSalaryMax { get; private set; }
-    public int AnnualSalaryMin { get; private set; }
-    public string CreatedAt { get; private set; }
-    public string Currency { get; private set; }
-    public string Description { get; private set; }
-    public string Excerpt { get; private set; }
-    public string Level { get; private set; }
-    public string PostedDate { get; private set; }
-    public string Title { get; private set; }
-    public string Type { get; private set; }
-    public string Url { get; private set; }
+    public int CompanyId { get;  set; }
+    public int ApiId { get;  set; }
+    public int AnnualSalaryMax { get; set; }
+    public int AnnualSalaryMin { get; set; }
+    public string CreatedAt { get; set; }
+    public string Currency { get; set; }
+    public string Description { get; set; }
+    public string Excerpt { get; set; }
+    public string Level { get; set; }
+    public string PostedDate { get; set; }
+    public string Title { get; set; }
+    public string Type { get; set; }
+    public string Url { get; set; }
     
-    public Company Company { get; private set; }
+    public Company Company { get; set; }
 
 
     public JobVacancy(int companyId, int apiId, int annualSalaryMax, int annualSalaryMin, string createdAt, string currency, string description, string excerpt,

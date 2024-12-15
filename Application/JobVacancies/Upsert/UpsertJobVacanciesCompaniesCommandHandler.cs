@@ -7,8 +7,7 @@ using MediatR;
 
 namespace Application.JobVacancies.Upsert;
 
-internal class
-    UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<JobVacancyCompanyResponse>>
+internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<JobVacancyCompanyResponse>>
 {
     private readonly ICompanyRepository _companyRepository;
     private readonly ISender _mediator;
