@@ -5,10 +5,12 @@ namespace Application.JobVacancies.Create;
 
 public record CreateJobVacancyCommand(
     int CompanyId,
+    int ApiId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,
     string Currency,
+    string Description,
     string Excerpt,
     string Level,
     string PostedDate,

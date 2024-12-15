@@ -44,10 +44,12 @@ internal class
     {
         var command = new CreateJobVacancyCommand(
             existingCompanyId,
+            request.ApiId,
             request.AnnualSalaryMax,
             request.AnnualSalaryMin,
             request.CreatedAt,
             request.Currency,
+            request.Description,
             request.Excerpt,
             request.Level,
             request.PostedDate,

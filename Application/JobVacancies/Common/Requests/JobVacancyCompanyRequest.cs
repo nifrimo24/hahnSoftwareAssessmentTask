@@ -3,15 +3,17 @@
 namespace Application.JobVacancies.Common.Requests;
 
 public record JobVacancyCompanyRequest(
-    string CompanyName,
-    string CompanyLogo,
-    string GeoLocation,
-    string Industry,
+    int ApiId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
+    string CompanyLogo,
+    string CompanyName,
     string CreatedAt,
     string Currency,
+    string Description,
     string Excerpt,
+    string GeoLocation,
+    string Industry,
     string Level,
     string PostedDate,
     string Title,

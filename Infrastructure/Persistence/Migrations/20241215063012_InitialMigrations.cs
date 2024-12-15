@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Infrastructure.Persistance.Migrations
+namespace Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class InitialMigrations : Migration
@@ -33,11 +33,13 @@ namespace Infrastructure.Persistance.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
+                    ApiId = table.Column<int>(type: "int", nullable: false),
                     AnnualSalaryMax = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     AnnualSalaryMin = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     CreatedAt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Currency = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Excerpt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Excerpt = table.Column<string>(type: "text", nullable: false),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostedDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
