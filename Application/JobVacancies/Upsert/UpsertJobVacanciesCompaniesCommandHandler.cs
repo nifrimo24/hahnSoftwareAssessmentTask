@@ -2,7 +2,9 @@
 using Application.JobVacancies.Common.Requests;
 using Application.JobVacancies.Common.Responses;
 using Application.JobVacancies.Create;
+using Application.JobVacancies.Update;
 using Domain.Companies;
+using Domain.JobVacancies;
 using MediatR;
 
 namespace Application.JobVacancies.Upsert;
@@ -10,11 +12,13 @@ namespace Application.JobVacancies.Upsert;
 internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<JobVacancyCompanyResponse>>
 {
     private readonly ICompanyRepository _companyRepository;
+    private readonly IJobVacancyRepository _jobVacancyRepository;
     private readonly ISender _mediator;
 
-    public UpsertJobVacanciesCompaniesCommandHandler(ICompanyRepository companyRepository, ISender mediator)
+    public UpsertJobVacanciesCompaniesCommandHandler(ICompanyRepository companyRepository, IJobVacancyRepository jobVacancyRepository, ISender mediator)
     {
         _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+        _jobVacancyRepository = jobVacancyRepository ?? throw new ArgumentNullException(nameof(jobVacancyRepository));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
@@ -41,24 +45,13 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
 
     private async Task<JobVacancyCompanyResponse> HandleExistingCompany(JobVacancyCompanyRequest request, int existingCompanyId, int registerNumber, CancellationToken cancellationToken)
     {
-        var command = new CreateJobVacancyCommand(
-            existingCompanyId,
-            request.ApiId,
-            request.AnnualSalaryMax,
-            request.AnnualSalaryMin,
-            request.CreatedAt,
-            request.Currency,
-            request.Description,
-            request.Excerpt,
-            request.Level,
-            request.PostedDate,
-            request.Title,
-            request.Type,
-            request.Url
-        );
+        var existingJobVacancy = await _jobVacancyRepository.GetByIApiIdAsync(request.ApiId);
 
-        var result = await _mediator.Send(command, cancellationToken);
-        return new JobVacancyCompanyResponse(existingCompanyId, result, registerNumber);
+        var jobVacancyId = existingJobVacancy != null
+            ? await HandleUpdateJobVacancy(request, existingJobVacancy.Id, cancellationToken)
+            : await HandleCreateJobVacancy(request, existingCompanyId, cancellationToken);
+        
+        return new JobVacancyCompanyResponse(existingCompanyId, jobVacancyId, registerNumber);
     }
 
     private async Task<JobVacancyCompanyResponse> HandleNewCompany(JobVacancyCompanyRequest request, int registerNumber, CancellationToken cancellationToken)
@@ -73,5 +66,46 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
         var newCompanyId = await _mediator.Send(companyCommand, cancellationToken);
 
         return await HandleExistingCompany(request, newCompanyId, registerNumber, cancellationToken);
+    }
+
+    private async Task<int> HandleCreateJobVacancy(JobVacancyCompanyRequest request, int existingId, CancellationToken cancellationToken )
+    {
+        var createCommand = new CreateJobVacancyCommand(
+            existingId,
+            request.ApiId,
+            request.AnnualSalaryMax,
+            request.AnnualSalaryMin,
+            request.CreatedAt,
+            request.Currency,
+            request.Description,
+            request.Excerpt,
+            request.Level,
+            request.PostedDate,
+            request.Title,
+            request.Type,
+            request.Url
+        );
+        
+        return await _mediator.Send(createCommand, cancellationToken);
+    }
+    
+    private async Task<int> HandleUpdateJobVacancy(JobVacancyCompanyRequest request, int existingId, CancellationToken cancellationToken )
+    {
+        var updateCommand = new UpdateJobVacancyCommand(
+            existingId,
+            request.AnnualSalaryMax,
+            request.AnnualSalaryMin,
+            request.CreatedAt,
+            request.Currency,
+            request.Description,
+            request.Excerpt,
+            request.Level,
+            request.PostedDate,
+            request.Title,
+            request.Type,
+            request.Url
+        );
+        
+        return await _mediator.Send(updateCommand, cancellationToken);
     }
 }
