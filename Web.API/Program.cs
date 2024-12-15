@@ -1,8 +1,18 @@
+using Application;
+using Application.Companies.Create;
+using Application.JobVacancies.Create;
+using Application.JobVacancies.Upsert;
+using Infrastructure;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Web.API;
+using Web.API.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddPresentation()
+    .AddInfrastructure(builder.Configuration)
+    .AddApplication();
 
 var app = builder.Build();
 
@@ -10,6 +20,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
@@ -32,6 +43,36 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
+
+#region CompanyEndpoints
+
+app.MapPost("/companies", async (ISender mediator, [FromBody] CreateCompanyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion CompanyEndpoints
+
+#region JobVacancyEndpoints
+
+app.MapPost("/job-vacancies", async (ISender mediator, [FromBody] CreateJobVacancyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion JobVacancyEndpoints
+
+#region UpsertEndpoints
+
+app.MapPost("/upsert", async (ISender mediator, [FromBody] UpsertJobVacanciesCompaniesCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+#endregion UpsertEndpoints
 
 app.Run();
 
