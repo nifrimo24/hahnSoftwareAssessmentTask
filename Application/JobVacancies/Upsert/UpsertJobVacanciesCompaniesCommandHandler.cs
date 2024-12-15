@@ -1,4 +1,5 @@
 ﻿using Application.Companies.Create;
+using Application.JobVacancies.Common.Requests;
 using Application.JobVacancies.Common.Responses;
 using Application.JobVacancies.Create;
 using Domain.Companies;
@@ -18,80 +19,58 @@ internal class
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task<List<JobVacancyCompanyResponse>> Handle(UpsertJobVacanciesCompaniesCommand command, CancellationToken cancellationToken)
+    public async Task<List<JobVacancyCompanyResponse>> Handle(UpsertJobVacanciesCompaniesCommand command,
+        CancellationToken cancellationToken)
     {
-        List<JobVacancyCompanyResponse> jobVacancyCompanyResponse = [];
-        var registerNumber = 0;
-        
+        var registerNumber = 1;
+        var responses = new List<JobVacancyCompanyResponse>();
+
         foreach (var request in command.JobVacancyCompanies)
         {
-            var companyExists = await _companyRepository.GetByCompanyNameAsync(request.CompanyName);
+            var existingCompany = await _companyRepository.GetByCompanyNameAsync(request.CompanyName);
 
-            if (companyExists != null)
-            {
-                CreateJobVacancyCommand existsCompanyJobVacancyCommand = new(
-                    companyExists.Id,
-                    request.AnnualSalaryMax,
-                    request.AnnualSalaryMin,
-                    request.CreatedAt,
-                    request.Currency,
-                    request.Excerpt,
-                    request.Level,
-                    request.PostedDate,
-                    request.Title,
-                    request.Type,
-                    request.Url
-                );
+            var response = existingCompany != null
+                ? await HandleExistingCompany(request, existingCompany.Id, registerNumber, cancellationToken)
+                : await HandleNewCompany(request, registerNumber, cancellationToken);
 
-                var existsCompanyJobVacancyCreateResult =
-                    await _mediator.Send(existsCompanyJobVacancyCommand, cancellationToken);
-                
-                var existsCompanyJobVacancyResponse = new JobVacancyCompanyResponse(
-                    companyExists.Id,
-                    existsCompanyJobVacancyCreateResult,
-                    registerNumber++
-                    
-                );
-                
-                jobVacancyCompanyResponse.Add(existsCompanyJobVacancyResponse);
-            }
-            else
-            {
-                CreateCompanyCommand companyCommand = new(
-                    request.CompanyName,
-                    request.CompanyLogo,
-                    request.GeoLocation,
-                    request.Industry
-                );
-
-                var createCompanyResult = await _mediator.Send(companyCommand, cancellationToken);
-
-                CreateJobVacancyCommand newCompanyJobVacancyCommand = new(
-                    createCompanyResult,
-                    request.AnnualSalaryMax,
-                    request.AnnualSalaryMin,
-                    request.CreatedAt,
-                    request.Currency,
-                    request.Excerpt,
-                    request.Level,
-                    request.PostedDate,
-                    request.Title,
-                    request.Type,
-                    request.Url
-                );
-
-                var newCompanyJobVacancyResult = await _mediator.Send(newCompanyJobVacancyCommand, cancellationToken);
-            
-                var newCompanyJobVacancyResponse = new JobVacancyCompanyResponse(
-                    createCompanyResult,
-                    newCompanyJobVacancyResult,
-                    registerNumber++
-                );
-            
-                jobVacancyCompanyResponse.Add(newCompanyJobVacancyResponse);
-            }
+            responses.Add(response);
+            registerNumber++;
         }
-        
-        return jobVacancyCompanyResponse;
+
+        return responses;
+    }
+
+    private async Task<JobVacancyCompanyResponse> HandleExistingCompany(JobVacancyCompanyRequest request, int existingCompanyId, int registerNumber, CancellationToken cancellationToken)
+    {
+        var command = new CreateJobVacancyCommand(
+            existingCompanyId,
+            request.AnnualSalaryMax,
+            request.AnnualSalaryMin,
+            request.CreatedAt,
+            request.Currency,
+            request.Excerpt,
+            request.Level,
+            request.PostedDate,
+            request.Title,
+            request.Type,
+            request.Url
+        );
+
+        var result = await _mediator.Send(command, cancellationToken);
+        return new JobVacancyCompanyResponse(existingCompanyId, result, registerNumber);
+    }
+
+    private async Task<JobVacancyCompanyResponse> HandleNewCompany(JobVacancyCompanyRequest request, int registerNumber, CancellationToken cancellationToken)
+    {
+        var companyCommand = new CreateCompanyCommand(
+            request.CompanyName,
+            request.CompanyLogo,
+            request.GeoLocation,
+            request.Industry
+        );
+
+        var newCompanyId = await _mediator.Send(companyCommand, cancellationToken);
+
+        return await HandleExistingCompany(request, newCompanyId, registerNumber, cancellationToken);
     }
 }
