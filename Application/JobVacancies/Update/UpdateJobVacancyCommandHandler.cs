@@ -23,9 +23,7 @@ internal class UpdateJobVacancyCommandHandler : IRequestHandler<UpdateJobVacancy
         }
 
         var updateJobVacancy = await _jobVacancyRepository.GetByIdAsync(command.Id);
-
-        updateJobVacancy.CompanyId = command.CompanyId;
-        updateJobVacancy.ApiId = command.ApiId;
+        
         updateJobVacancy.AnnualSalaryMax = command.AnnualSalaryMax;
         updateJobVacancy.AnnualSalaryMin = command.AnnualSalaryMin;
         updateJobVacancy.CreatedAt = command.CreatedAt;

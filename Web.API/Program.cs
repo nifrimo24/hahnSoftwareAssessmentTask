@@ -1,6 +1,7 @@
 using Application;
 using Application.Companies.Create;
 using Application.JobVacancies.Create;
+using Application.JobVacancies.Update;
 using Application.JobVacancies.Upsert;
 using Infrastructure;
 using MediatR;
@@ -38,6 +39,12 @@ app.MapPost("/companies", async (ISender mediator, [FromBody] CreateCompanyComma
 #region JobVacancyEndpoints
 
 app.MapPost("/job-vacancies", async (ISender mediator, [FromBody] CreateJobVacancyCommand command) =>
+{
+    var createResult = await mediator.Send(command);
+    return Results.Ok(createResult);
+});
+
+app.MapPut("/job-vacancies", async (ISender mediator, [FromBody] UpdateJobVacancyCommand command) =>
 {
     var createResult = await mediator.Send(command);
     return Results.Ok(createResult);

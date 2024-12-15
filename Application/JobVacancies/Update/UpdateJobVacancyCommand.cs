@@ -4,8 +4,6 @@ namespace Application.JobVacancies.Update;
 
 public record UpdateJobVacancyCommand(
     int Id,
-    int CompanyId,
-    int ApiId,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
     string CreatedAt,
