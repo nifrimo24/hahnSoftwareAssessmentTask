@@ -5,7 +5,7 @@ namespace WorkerServiceJobVacancyCompany.Application.Common;
 
 public class JobVacancyCompanyAPIRequest
 {
-    [JsonProperty("JobVacancyCompanies")]
+    [JsonProperty(nameof(JobVacancyCompanies))]
     public List<JobVacancyCompany> JobVacancyCompanies { get; set; }
 
     public JobVacancyCompanyAPIRequest(List<JobVacancyCompany> jobVacancyCompanies)
@@ -16,52 +16,52 @@ public class JobVacancyCompanyAPIRequest
 
 public class JobVacancyCompany
 {
-    [JsonProperty("ApiId")]
+    [JsonProperty(nameof(ApiId))]
     public int ApiId { get; set; }
 
-    [JsonProperty("CompanyName")]
+    [JsonProperty(nameof(CompanyName))]
     public string CompanyName { get; set; }
 
-    [JsonProperty("CompanyLogo")]
+    [JsonProperty(nameof(CompanyLogo))]
     public string CompanyLogo { get; set; }
 
-    [JsonProperty("GeoLocation")]
+    [JsonProperty(nameof(GeoLocation))]
     public string GeoLocation { get; set; }
 
-    [JsonProperty("Industry")]
+    [JsonProperty(nameof(Industry))]
     public string Industry { get; set; }
 
-    [JsonProperty("AnnualSalaryMax")]
+    [JsonProperty(nameof(AnnualSalaryMax))]
     public int AnnualSalaryMax { get; set; }
 
-    [JsonProperty("AnnualSalaryMin")]
+    [JsonProperty(nameof(AnnualSalaryMin))]
     public int AnnualSalaryMin { get; set; }
 
-    [JsonProperty("CreatedAt")]
+    [JsonProperty(nameof(CreatedAt))]
     public string CreatedAt { get; set; }
 
-    [JsonProperty("Currency")]
+    [JsonProperty(nameof(Currency))]
     public string Currency { get; set; }
 
-    [JsonProperty("Description")]
+    [JsonProperty(nameof(Description))]
     public string Description { get; set; }
 
-    [JsonProperty("Excerpt")]
+    [JsonProperty(nameof(Excerpt))]
     public string Excerpt { get; set; }
 
-    [JsonProperty("Level")]
+    [JsonProperty(nameof(Level))]
     public string Level { get; set; }
 
-    [JsonProperty("PostedDate")]
+    [JsonProperty(nameof(PostedDate))]
     public string PostedDate { get; set; }
 
-    [JsonProperty("Title")]
+    [JsonProperty(nameof(Title))]
     public string Title { get; set; }
 
-    [JsonProperty("Type")]
+    [JsonProperty(nameof(Type))]
     public string Type { get; set; }
 
-    [JsonProperty("Url")]
+    [JsonProperty(nameof(Url))]
     public string Url { get; set; }
     
     public JobVacancyCompany(int apiId, int annualSalaryMax, int annualSalaryMin, string companyLogo, string companyName, string createdAt, string currency, string description, string excerpt, string geoLocation, string industry, string level, string postedDate, string title, string type, string url)

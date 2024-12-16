@@ -48,10 +48,13 @@ public class UpsertJobVacancyCompanyService
         var status = upsertResponse.IsSuccessStatusCode;
         var statusCode = upsertResponse.StatusCode;
         
-        var fileName = $"UPSERT_{DateTime.Now.ToString("yyyy-MM-dd")}_STATUS_{status}.json";
-        var filePath = Path.Combine(@"D:\JobVacancyCompany_Upsert", fileName);
-        var msg = await upsertResponse.Content.ReadAsStringAsync();
+        var date = DateTime.Now.ToString("yyyy-MM-dd");
+        var time = DateTime.Now.ToString("HHmmss");
         
+        var fileName = $"UPSERT_{date}_{time}_STATUS_{statusCode}_{status}.json";
+        var filePath = Path.Combine(@"D:\JobVacancyCompany_Upsert", fileName);
+        
+        var msg = await upsertResponse.Content.ReadAsStringAsync();
         var jsonObject = new
         {
             Message = msg
