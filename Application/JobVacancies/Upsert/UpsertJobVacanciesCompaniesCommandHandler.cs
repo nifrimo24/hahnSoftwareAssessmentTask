@@ -10,7 +10,7 @@ using MediatR;
 
 namespace Application.JobVacancies.Upsert;
 
-internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<JobVacancyCompanyResponse>>
+internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<UpsertJobVacanciesCompaniesCommand, List<UpsertJobVacancyCompanyResponse>>
 {
     private readonly ICompanyRepository _companyRepository;
     private readonly IJobVacancyRepository _jobVacancyRepository;
@@ -23,11 +23,11 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    public async Task<List<JobVacancyCompanyResponse>> Handle(UpsertJobVacanciesCompaniesCommand command,
+    public async Task<List<UpsertJobVacancyCompanyResponse>> Handle(UpsertJobVacanciesCompaniesCommand command,
         CancellationToken cancellationToken)
     {
         var registerNumber = 1;
-        var responses = new List<JobVacancyCompanyResponse>();
+        var responses = new List<UpsertJobVacancyCompanyResponse>();
 
         foreach (var request in command.JobVacancyCompanies)
         {
@@ -44,7 +44,7 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
         return responses;
     }
 
-    private async Task<JobVacancyCompanyResponse> HandleExistingCompany(JobVacancyCompanyRequest request, int existingCompanyId, int registerNumber, CancellationToken cancellationToken)
+    private async Task<UpsertJobVacancyCompanyResponse> HandleExistingCompany(JobVacancyCompanyRequest request, int existingCompanyId, int registerNumber, CancellationToken cancellationToken)
     {
         var updatedCompanyId = await HandleUpdateCompany(request, existingCompanyId, cancellationToken);
         
@@ -54,10 +54,10 @@ internal class UpsertJobVacanciesCompaniesCommandHandler : IRequestHandler<Upser
             ? await HandleUpdateJobVacancy(request, existingJobVacancy.Id, cancellationToken)
             : await HandleCreateJobVacancy(request, existingCompanyId, cancellationToken);
         
-        return new JobVacancyCompanyResponse(updatedCompanyId, jobVacancyId, registerNumber);
+        return new UpsertJobVacancyCompanyResponse(updatedCompanyId, jobVacancyId, registerNumber);
     }
 
-    private async Task<JobVacancyCompanyResponse> HandleNewCompany(JobVacancyCompanyRequest request, int registerNumber, CancellationToken cancellationToken)
+    private async Task<UpsertJobVacancyCompanyResponse> HandleNewCompany(JobVacancyCompanyRequest request, int registerNumber, CancellationToken cancellationToken)
     {
         var companyCommand = new CreateCompanyCommand(
             request.CompanyName,

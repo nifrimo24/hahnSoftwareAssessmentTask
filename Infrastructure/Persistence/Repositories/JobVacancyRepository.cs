@@ -16,4 +16,5 @@ public class JobVacancyRepository : IJobVacancyRepository
     public async Task<bool> ExistsAsync(int id) => await _context.JobVacancies.AnyAsync(x => x.Id == id);
     public async Task<JobVacancy?> GetByIApiIdAsync(int jobVacancyApiId) => await _context.JobVacancies.SingleOrDefaultAsync(x => x.ApiId == jobVacancyApiId);
     public async Task<JobVacancy?> GetByIdAsync(int jobVacancyId) => await _context.JobVacancies.SingleOrDefaultAsync(x => x.Id == jobVacancyId);
+    public async Task<IReadOnlyList<JobVacancy>> GetAllJobVacancies() => await _context.JobVacancies.Include(jv => jv.Company).ToListAsync();
 }

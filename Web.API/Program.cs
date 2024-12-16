@@ -2,6 +2,7 @@ using Application;
 using Application.Companies.Create;
 using Application.Companies.Update;
 using Application.JobVacancies.Create;
+using Application.JobVacancies.GetAll;
 using Application.JobVacancies.Update;
 using Application.JobVacancies.Upsert;
 using Infrastructure;
@@ -44,6 +45,12 @@ app.MapPut("/companies", async (ISender mediator, [FromBody] UpdateCompanyComman
 #endregion CompanyEndpoints
 
 #region JobVacancyEndpoints
+
+app.MapGet("/job-vacancies", async (ISender mediator) =>
+{
+    var queryResult = await mediator.Send(new GetAllJobVacanciesQuery());
+    return Results.Ok(queryResult);
+});
 
 app.MapPost("/job-vacancies", async (ISender mediator, [FromBody] CreateJobVacancyCommand command) =>
 {

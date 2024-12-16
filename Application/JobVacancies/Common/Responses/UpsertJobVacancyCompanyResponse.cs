@@ -1,6 +1,6 @@
 ﻿namespace Application.JobVacancies.Common.Responses;
 
-public record JobVacancyCompanyResponse(
+public record UpsertJobVacancyCompanyResponse(
     int companyId,
     int jobVacancyId,
     int registerNumber

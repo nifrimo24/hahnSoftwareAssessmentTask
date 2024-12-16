@@ -6,4 +6,4 @@ namespace Application.JobVacancies.Upsert;
 
 public record UpsertJobVacanciesCompaniesCommand(
     List<JobVacancyCompanyRequest> JobVacancyCompanies
-) : IRequest<List<JobVacancyCompanyResponse>>;
+) : IRequest<List<UpsertJobVacancyCompanyResponse>>;
