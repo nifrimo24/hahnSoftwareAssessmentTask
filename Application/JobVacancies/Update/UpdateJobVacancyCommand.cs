@@ -1,22 +1,18 @@
-﻿using Domain.Companies;
+﻿using MediatR;
 
-namespace Application.JobVacancies.Common.Requests;
+namespace Application.JobVacancies.Update;
 
-public record JobVacancyCompanyRequest(
-    int ApiId,
+public record UpdateJobVacancyCommand(
+    int Id,
     int AnnualSalaryMax,
     int AnnualSalaryMin,
-    string CompanyLogo,
-    string CompanyName,
     string CreatedAt,
     string Currency,
     string Description,
     string Excerpt,
-    string GeoLocation,
-    string Industry,
     string Level,
     string PostedDate,
     string Title,
     string Type,
     string Url
-);
+) : IRequest<int>;

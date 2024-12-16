@@ -13,5 +13,7 @@ public class JobVacancyRepository : IJobVacancyRepository
     }
     
     public async Task AddAsync(JobVacancy jobVacancy) => await _context.JobVacancies.AddAsync(jobVacancy);
+    public async Task<bool> ExistsAsync(int id) => await _context.JobVacancies.AnyAsync(x => x.Id == id);
+    public async Task<JobVacancy?> GetByIApiIdAsync(int jobVacancyApiId) => await _context.JobVacancies.SingleOrDefaultAsync(x => x.ApiId == jobVacancyApiId);
     public async Task<JobVacancy?> GetByIdAsync(int jobVacancyId) => await _context.JobVacancies.SingleOrDefaultAsync(x => x.Id == jobVacancyId);
 }

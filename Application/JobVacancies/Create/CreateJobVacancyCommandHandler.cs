@@ -19,10 +19,12 @@ internal class CreateJobVacancyCommandHandler : IRequestHandler<CreateJobVacancy
     {
         var jobVacancy = new JobVacancy(
             command.CompanyId,
+            command.ApiId,
             command.AnnualSalaryMax,
             command.AnnualSalaryMin,
             command.CreatedAt,
             command.Currency,
+            command.Description,
             command.Excerpt,
             command.Level,
             command.PostedDate,

@@ -23,10 +23,18 @@ public class JobVacancyConfiguration : IEntityTypeConfiguration<JobVacancy>
         
         builder.Property(jv => jv.Currency).HasMaxLength(20);
         
+        builder.Property(jv => jv.Description)
+            .IsRequired()
+            .HasColumnType("text");
+
+        builder.Property(jv => jv.Excerpt)
+            .IsRequired()
+            .HasColumnType("text");
+        
         builder.Property(jv => jv.PostedDate).IsRequired();
 
-        builder.Property(jv => jv.Title).HasMaxLength(50);
+        builder.Property(jv => jv.Title).HasMaxLength(150);
         
-        builder.Property(jv => jv.Type).HasMaxLength(20);
+        builder.Property(jv => jv.Type).HasMaxLength(100);
     }
 }
