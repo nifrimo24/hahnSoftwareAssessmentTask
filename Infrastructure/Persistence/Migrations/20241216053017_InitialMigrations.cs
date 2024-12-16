@@ -42,8 +42,8 @@ namespace Infrastructure.Persistence.Migrations
                     Excerpt = table.Column<string>(type: "text", nullable: false),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PostedDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

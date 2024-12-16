@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-WorkerServiceJobVacancyCompany-27ec2976-9ace-456e-b88c-74ea05a8dc84</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Hangfire" Version="1.8.17" />
+        <PackageReference Include="Hangfire.AspNetCore" Version="1.8.17" />
+        <PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
+        <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.0-preview3.24332.3" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+    </ItemGroup>
+</Project>
